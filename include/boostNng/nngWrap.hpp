@@ -49,7 +49,7 @@ class BOOSTNNG_EXPORT NngWrap {
   void connectSocket();
   bool getIsServer() const;
   template < typename Tret, typename... Args >
-  Tret callNngSockFunc( std::function< Tret( nng_socket, Args... ) > func, Args... args ) {
+  Tret callNngSockFunc( Tret ( *func )( nng_socket, Args... ), Args... args ) {
     return func( getSocket(), args... );
   }
 
