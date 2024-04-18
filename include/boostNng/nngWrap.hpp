@@ -50,7 +50,7 @@ class BOOSTNNG_EXPORT NngWrap {
   bool getIsServer() const;
   template < typename Tret, typename... Args >
   Tret callNngSockFunc( std::function< Tret( nng_socket, Args... ) > func, Args... args ) {
-    func( getSocket(), args... );
+    return func( getSocket(), args... );
   }
 
   private:
