@@ -7,7 +7,7 @@ namespace BoostNng {
 PubSub::PubSub( std::string const &host, bool isPublisher )
     : NngWrap( host, isPublisher, isPublisher ? NngWrap::SocketType::Pub0 : NngWrap::SocketType::Sub0 ) {
   if( !isPublisher ) {
-    callNngSockFunc< int, const char *, const void *, size_t >( nng_setopt, NNG_OPT_SUB_SUBSCRIBE, nullptr, 0 );
+    callNngSockFunc< int, const char *, const void *, size_t >( nng_socket_set, NNG_OPT_SUB_SUBSCRIBE, nullptr, 0 );
   }
   connectSocket();
 }
