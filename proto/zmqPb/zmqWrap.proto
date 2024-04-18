@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package BoostNng.Proto;
+
+message Wrapper {
+  string protoName = 1;
+  bytes protoContent = 2;
+}
