@@ -7,9 +7,11 @@
 #include <sstream>
 #include <string>
 
+#include "boostNng/_export.hpp"
+
 namespace BoostNng {
 
-class NetworkMessage {
+class BOOSTNNG_EXPORT NetworkMessage {
   public:
   NetworkMessage();
   NetworkMessage( BoostNng::NetworkMessage const& other );
