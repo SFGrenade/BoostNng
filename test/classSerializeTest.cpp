@@ -1,7 +1,9 @@
 #include <boostNng/networkMessage.hpp>
 #include <boostNng/subscription.hpp>
+#include <cstdlib>
 #include <gtest/gtest.h>
 #include <limits>
+#include <string>
 
 class MyClass {
   public:
@@ -55,12 +57,13 @@ class MyClass {
   }
 };
 
-TEST( BoostNng_SerializeTest, ClassConversion ) {
+TEST( BoostNng, ClassConversion ) {
   MyClass myMessage;
 
-  std::function< void( BoostNng::NetworkMessage const& ) > myCallback
-      = [myMessage]( BoostNng::NetworkMessage const& message ) { EXPECT_EQ( myMessage, message.to< MyClass >() ); };
+  std::function< void( BoostNng::NetworkMessage const& ) > myCallback = [myMessage]( BoostNng::NetworkMessage const& message ) {
+    EXPECT_EQ( myMessage, message.to< MyClass >() ) << "message:\n" + message.getTopic() + "\n" + message.getContent();
+  };
   BoostNng::Subscription sub( myCallback );
 
-  sub( BoostNng::NetworkMessage::from( myMessage ) );
+  sub( BoostNng::NetworkMessage::from< MyClass >( myMessage ) );
 }

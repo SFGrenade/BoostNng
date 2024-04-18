@@ -21,6 +21,7 @@ Subscription::Subscription( std::function< void( BoostNng::NetworkMessage const&
 
 Subscription::~Subscription() {
   delete pimpl;
+  pimpl = nullptr;
 }
 
 void Subscription::operator()( BoostNng::NetworkMessage const& message ) const {

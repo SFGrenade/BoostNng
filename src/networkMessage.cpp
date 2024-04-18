@@ -25,6 +25,7 @@ NetworkMessage::NetworkMessage( std::string const& topic, std::string const& con
 
 NetworkMessage::~NetworkMessage() {
   delete this->pimpl;
+  this->pimpl = nullptr;
 }
 
 std::string NetworkMessage::getTopic() const {
