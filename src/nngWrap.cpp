@@ -176,7 +176,7 @@ void NngWrap::connectSocket() {
   if( pimpl->isServer_ ) {
     NNG_FUNC_WITH_THROW( nng_listen, pimpl->nngSocket_, pimpl->host_.c_str(), &pimpl->nngListener_, 0 );
   } else {
-    NNG_FUNC_WITH_THROW( nng_dial, pimpl->nngSocket_, pimpl->host_.c_str(), &pimpl->nngListener_, 0 );
+    NNG_FUNC_WITH_THROW( nng_dial, pimpl->nngSocket_, pimpl->host_.c_str(), &pimpl->nngDialer_, 0 );
   }
 }
 
