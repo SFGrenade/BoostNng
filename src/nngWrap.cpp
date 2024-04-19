@@ -101,6 +101,15 @@ NngWrap::~NngWrap() {
     pimpl->queueToSend_.pop();
   }
   pimpl->subscribedMessages_.clear();
+  if( pimpl->isServer_ ) {
+    if( pimpl->nngListener_ ) {
+      NNG_FUNC_WITH_THROW( nng_listener_close, pimpl->nngListener_ );
+    }
+  } else {
+    if( pimpl->nngDialer_ ) {
+      NNG_FUNC_WITH_THROW( nng_dialer_close, pimpl->nngDialer_ );
+    }
+  }
   NNG_FUNC_WITH_THROW( nng_close, pimpl->nngSocket_ );
   delete pimpl;
   pimpl = nullptr;
@@ -165,10 +174,9 @@ void NngWrap::run() {
 
 void NngWrap::connectSocket() {
   if( pimpl->isServer_ ) {
-    NNG_FUNC_WITH_THROW( nng_listener_create, &pimpl->nngListener_, pimpl->nngSocket_, pimpl->host_.c_str() );
-    NNG_FUNC_WITH_THROW( nng_listener_start, pimpl->nngListener_, 0 );
+    NNG_FUNC_WITH_THROW( nng_listen, pimpl->nngSocket_, pimpl->host_.c_str(), &pimpl->nngListener_, 0 );
   } else {
-    // pimpl->zmqSocket_.connect( pimpl->host_ );
+    NNG_FUNC_WITH_THROW( nng_dial, pimpl->nngSocket_, pimpl->host_.c_str(), &pimpl->nngListener_, 0 );
   }
 }
 
