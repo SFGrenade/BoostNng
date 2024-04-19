@@ -23,7 +23,11 @@ jobs:
         - { runner: ubuntu-latest,  os: linux,   arch: x86_64, archive_ext: .tar.gz, vs_runtime: none }
         - { runner: macos-latest,   os: macos,   arch: x86_64, archive_ext: .tar.gz, vs_runtime: none }
         #- { runner: macos-latest,   os: macos,   arch: arm64,  archive_ext: .tar.gz, vs_runtime: none }
-        mode: [ debug, release, releasedbg, minsizerel ]
+        mode:
+        - { type: debug,      vs_runtime_ext: d }
+        - { type: release,    vs_runtime_ext: }
+        - { type: releasedbg, vs_runtime_ext: }
+        - { type: minsizerel, vs_runtime_ext: }
         libkind: [shared, static]
 
     runs-on: ${{ matrix.platform.runner }}
@@ -34,8 +38,13 @@ jobs:
       run: echo "key=$(date +'%W')" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: "Set OUTPUT_FILE variable"
-      run: echo "OUTPUT_FILE=${{ matrix.platform.os }}_${{ matrix.platform.arch }}_${{ matrix.mode }}_${{ matrix.libkind }}_${{ matrix.platform.vs_runtime }}${{ matrix.platform.archive_ext }}" >> $GITHUB_ENV
+    - name: Set vs_runtime string (windows)
+      if: ${{ matrix.platform.os == 'windows' }}
+      run: echo "VS_RUNTIME_STRING=${{ matrix.platform.vs_runtime }}${{ matrix.mode.vs_runtime_ext }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set OUTPUT_FILE variable
+      run: echo "OUTPUT_FILE=${{ matrix.platform.os }}_${{ matrix.platform.arch }}_${{ matrix.mode.type }}_${{ matrix.libkind }}_${{ env.VS_RUNTIME_STRING }}${{ matrix.platform.archive_ext }}" >> $GITHUB_ENV
       shell: bash
 
     # Force xmake to a specific folder (for cache)
@@ -71,15 +80,15 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: ${{ env.XMAKE_GLOBALDIR }}/.xmake/packages
-        key: ${{ matrix.platform.os }}-${{ matrix.platform.arch }}-${{ matrix.mode }}-${{ matrix.libkind }}-${{ matrix.platform.vs_runtime }}-${{ steps.dep_hash.outputs.hash }}-W${{ steps.cache_key.outputs.key }}
+        key: ${{ matrix.platform.os }}-${{ matrix.platform.arch }}-${{ matrix.mode.type }}-${{ matrix.libkind }}-${{ env.VS_RUNTIME_STRING }}-${{ steps.dep_hash.outputs.hash }}-W${{ steps.cache_key.outputs.key }}
 
     - name: Configure xmake and install dependencies (Unix)
       if: ${{ matrix.platform.os != 'windows' }}
-      run: xmake config -vD --arch=${{ matrix.platform.arch }} --mode=${{ matrix.mode }} --kind=${{ matrix.libkind }} --yes --policies=package.precompiled:n
+      run: xmake config -vD --arch=${{ matrix.platform.arch }} --mode=${{ matrix.mode.type }} --kind=${{ matrix.libkind }} --yes --policies=package.precompiled:n
 
     - name: Configure xmake and install dependencies (Windows)
       if: ${{ matrix.platform.os == 'windows' }}
-      run: xmake config -vD --arch=${{ matrix.platform.arch }} --mode=${{ matrix.mode }} --kind=${{ matrix.libkind }} --vs_runtime=${{ matrix.platform.vs_runtime }} --yes --policies=package.precompiled:n
+      run: xmake config -vD --arch=${{ matrix.platform.arch }} --mode=${{ matrix.mode.type }} --kind=${{ matrix.libkind }} --vs_runtime=${{ env.VS_RUNTIME_STRING }} --yes --policies=package.precompiled:n
 
     # Save dependencies
     - name: Save cached xmake dependencies
