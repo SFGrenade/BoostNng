@@ -102,13 +102,13 @@ NngWrap::~NngWrap() {
   }
   pimpl->subscribedMessages_.clear();
   if( pimpl->isServer_ ) {
-    if( pimpl->nngListener_ ) {
-      NNG_FUNC_WITH_THROW( nng_listener_close, pimpl->nngListener_ );
-    }
+    // if( pimpl->nngListener_ ) {
+    NNG_FUNC_WITH_THROW( nng_listener_close, pimpl->nngListener_ );
+    // }
   } else {
-    if( pimpl->nngDialer_ ) {
-      NNG_FUNC_WITH_THROW( nng_dialer_close, pimpl->nngDialer_ );
-    }
+    // if( pimpl->nngDialer_ ) {
+    NNG_FUNC_WITH_THROW( nng_dialer_close, pimpl->nngDialer_ );
+    // }
   }
   NNG_FUNC_WITH_THROW( nng_close, pimpl->nngSocket_ );
   delete pimpl;
