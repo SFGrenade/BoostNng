@@ -18,16 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-        - { runner: windows-latest, os: windows, arch: x64,    archive_ext: .zip,    vs_runtime: MT }
-        - { runner: windows-latest, os: windows, arch: x64,    archive_ext: .zip,    vs_runtime: MD }
-        - { runner: ubuntu-latest,  os: linux,   arch: x86_64, archive_ext: .tar.gz, vs_runtime: none }
-        - { runner: macos-latest,   os: macos,   arch: x86_64, archive_ext: .tar.gz, vs_runtime: none }
-        #- { runner: macos-latest,   os: macos,   arch: arm64,  archive_ext: .tar.gz, vs_runtime: none }
-        mode:
-        - { type: debug,      vs_runtime_ext: d }
-        - { type: release,    vs_runtime_ext: }
-        - { type: releasedbg, vs_runtime_ext: }
-        - { type: minsizerel, vs_runtime_ext: }
+        - { runner: windows-latest, os: windows, arch: x64,    archive_ext: .zip }
+        - { runner: ubuntu-latest,  os: linux,   arch: x86_64, archive_ext: .tar.gz }
+        - { runner: macos-latest,   os: macos,   arch: x86_64, archive_ext: .tar.gz }
+        #- { runner: macos-latest,   os: macos,   arch: arm64,  archive_ext: .tar.gz }
+        mode: [debug, release, releasedbg, minsizerel ]
         libkind: [shared, static]
 
     runs-on: ${{ matrix.platform.runner }}
@@ -40,11 +35,29 @@ jobs:
 
     - name: Set vs_runtime string (windows)
       if: ${{ matrix.platform.os == 'windows' }}
-      run: echo "VS_RUNTIME_STRING=${{ matrix.platform.vs_runtime }}${{ matrix.mode.vs_runtime_ext }}" >> $GITHUB_ENV
+      run: |
+        if [ "${{ matrix.mode }}" == "debug" ]; then
+          if [ "${{ matrix.libkind }}" == "shared" ]; then
+            echo "VS_RUNTIME_STRING=MDd" >> $GITHUB_ENV
+          else
+            echo "VS_RUNTIME_STRING=MTd" >> $GITHUB_ENV
+          fi
+        else
+          if [ "${{ matrix.libkind }}" == "shared" ]; then
+            echo "VS_RUNTIME_STRING=MD" >> $GITHUB_ENV
+          else
+            echo "VS_RUNTIME_STRING=MT" >> $GITHUB_ENV
+          fi
+        fi
       shell: bash
 
     - name: Set OUTPUT_FILE variable
-      run: echo "OUTPUT_FILE=${{ matrix.platform.os }}_${{ matrix.platform.arch }}_${{ matrix.mode.type }}_${{ matrix.libkind }}_${{ env.VS_RUNTIME_STRING }}${{ matrix.platform.archive_ext }}" >> $GITHUB_ENV
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          echo "OUTPUT_FILE=${{ matrix.platform.os }}_${{ matrix.platform.arch }}_${{ matrix.mode }}_${{ matrix.libkind }}_${{ env.VS_RUNTIME_STRING }}${{ matrix.platform.archive_ext }}" >> $GITHUB_ENV
+        else
+          echo "OUTPUT_FILE=${{ matrix.platform.os }}_${{ matrix.platform.arch }}_${{ matrix.mode }}_${{ matrix.libkind }}${{ matrix.platform.archive_ext }}" >> $GITHUB_ENV
+        fi
       shell: bash
 
     # Force xmake to a specific folder (for cache)
