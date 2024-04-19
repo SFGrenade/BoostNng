@@ -19,7 +19,7 @@ package("boostnng")
         result.links = "BoostNng"
         result.linkdirs = package:installdir("lib")
         result.includedirs = package:installdir("include")
-        result.libfiles = path.join(package:installdir(libfiledir), "BoostNng.lib")
+        result.libfiles = path.join(package:installdir(libfiledir), "BoostNng" .. ((package:config("shared") and package:is_plat("windows", "mingw")) and ".dll" or ".lib"))
         return result
     end)
 
@@ -34,5 +34,5 @@ package("boostnng")
                 BoostNng::ReqRep network( "tcp://127.0.0.1:13337", false );
                 network.run();
             }
-        ]]}, {configs = {languages = "c++14"}, includes = "boostNng/reqRep.hpp"}))
+        ]]}, {configs = {languages = "c++17"}, includes = "boostNng/reqRep.hpp"}))
     end)
