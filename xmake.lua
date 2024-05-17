@@ -23,6 +23,7 @@ end
 add_requireconfs( "*", { debug = get_config( "mode" ) == "debug", configs = { shared = get_config( "kind" ) == "shared" } } )
 
 add_requires( "boost" )
+add_requires( "hedley" )
 add_requires( "nng" )
 
 add_requireconfs( "boost", { configs = { serialization = true } } )
@@ -35,17 +36,13 @@ target( "BoostNng" )
     set_default( true )
     set_group( "LIBS" )
 
+    add_defines( "BOOSTNNG_COMPILING" )
     if is_kind( "shared" ) then
-        if is_plat( "linux" ) then
-            add_defines( "BOOSTNNG_DO_EXPORT_LINUX" )
-        elseif is_plat( "macosx" ) then
-            add_defines( "BOOSTNNG_DO_EXPORT_MACOSX" )
-        elseif is_plat( "windows" ) then
-            add_defines( "BOOSTNNG_DO_EXPORT_WINDOWS" )
-        end
+        add_defines( "BOOSTNNG_IS_SHARED" )
     end
 
     add_packages( "boost", { public = true } )
+    add_packages( "hedley", { public = true } )
     add_packages( "nng", { public = true } )
 
     add_includedirs( "include", { public = true } )

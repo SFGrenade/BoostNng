@@ -6,7 +6,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_EXPORT PushPull : public NngWrap {
+class BOOSTNNG_API PushPull : public NngWrap {
   public:
   PushPull( std::string const& host, bool isPusher );
   ~PushPull() override;

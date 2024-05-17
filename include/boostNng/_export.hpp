@@ -1,17 +1,15 @@
-#if defined( BOOSTNNG_DO_EXPORT_LINUX )
+#include <hedley/hedley.h>
 
-#define BOOSTNNG_EXPORT __attribute__( ( dllexport ) ) __attribute__( ( visibility( "default" ) ) )
+#if defined( BOOSTNNG_IS_SHARED ) && defined( BOOSTNNG_COMPILING )
 
-#elif defined( BOOSTNNG_DO_EXPORT_MACOSX )
+#define BOOSTNNG_API HEDLEY_PUBLIC
 
-#define BOOSTNNG_EXPORT __attribute__( ( visibility( "default" ) ) )
+#elif defined( BOOSTNNG_IS_SHARED )
 
-#elif defined( BOOSTNNG_DO_EXPORT_WINDOWS )
-
-#define BOOSTNNG_EXPORT __declspec( dllexport )
+#define BOOSTNNG_API HEDLEY_IMPORT
 
 #else
 
-#define BOOSTNNG_EXPORT
+#define BOOSTNNG_API
 
 #endif

@@ -6,7 +6,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_EXPORT ReqRep : public NngWrap {
+class BOOSTNNG_API ReqRep : public NngWrap {
   public:
   enum class Status { Receiving, Sending };
 

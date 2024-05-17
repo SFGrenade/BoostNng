@@ -8,7 +8,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_EXPORT Subscription {
+class BOOSTNNG_API Subscription {
   public:
   Subscription();
   Subscription( BoostNng::Subscription const& other );

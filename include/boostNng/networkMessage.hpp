@@ -11,7 +11,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_EXPORT NetworkMessage {
+class BOOSTNNG_API NetworkMessage {
   public:
   NetworkMessage();
   NetworkMessage( BoostNng::NetworkMessage const& other );
