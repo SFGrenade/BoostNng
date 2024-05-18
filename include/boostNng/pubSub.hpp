@@ -6,7 +6,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_API PubSub : public NngWrap {
+class BOOSTNNG_API_CLASSES PubSub : public NngWrap {
   public:
   PubSub( std::string const& host, bool isPublisher );
   ~PubSub() override;

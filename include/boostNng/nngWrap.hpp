@@ -9,7 +9,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_API NngWrap {
+class BOOSTNNG_API_CLASSES NngWrap {
   public:
   enum class SocketType {
     Bus0,

@@ -6,7 +6,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_API Bus : public NngWrap {
+class BOOSTNNG_API_CLASSES Bus : public NngWrap {
   public:
   Bus( std::string const& host, bool isServer );
   ~Bus() override;

@@ -11,7 +11,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_API NetworkMessage {
+class BOOSTNNG_API_CLASSES NetworkMessage {
   public:
   NetworkMessage();
   NetworkMessage( BoostNng::NetworkMessage const& other );

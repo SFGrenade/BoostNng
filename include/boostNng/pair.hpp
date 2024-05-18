@@ -6,7 +6,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_API Pair0 : public NngWrap {
+class BOOSTNNG_API_CLASSES Pair0 : public NngWrap {
   public:
   Pair0( std::string const& host, bool isServer );
   ~Pair0() override;
@@ -18,7 +18,7 @@ class BOOSTNNG_API Pair0 : public NngWrap {
   virtual void didRecv() override;
 };
 
-class BOOSTNNG_API Pair1 : public NngWrap {
+class BOOSTNNG_API_CLASSES Pair1 : public NngWrap {
   public:
   Pair1( std::string const& host, bool isServer );
   ~Pair1() override;

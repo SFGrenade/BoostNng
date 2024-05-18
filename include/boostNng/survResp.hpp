@@ -8,7 +8,7 @@
 
 namespace BoostNng {
 
-class BOOSTNNG_API SurvResp : public NngWrap {
+class BOOSTNNG_API_CLASSES SurvResp : public NngWrap {
   public:
   SurvResp( std::string const& host, bool isServer );
   ~SurvResp() override;
