@@ -8,7 +8,12 @@
 #elif defined( BOOSTNNG_IS_SHARED )
 
 #define BOOSTNNG_API_FUNCTIONS HEDLEY_IMPORT
+
+#if defined( _WIN32 ) || defined( __CYGWIN__ )
+#define BOOSTNNG_API_CLASSES HEDLEY_IMPORT
+#else
 #define BOOSTNNG_API_CLASSES
+#endif
 
 #else
 
